@@ -17,8 +17,9 @@ public class Vampire : MonoBehaviour
 
     public Human Human;
 
-    public int ReflectReceptionMillisecond = 500;
+    public int ReflectReceptionMillisecond = 1000;
     public int ReactionMillisecond = 3000;
+    public int LastReactionMillisecond = 3000;
 
     public List<Sprite> DefaultSprites = new ();
     public List<Sprite> ReactionSprites = new ();
@@ -106,16 +107,16 @@ public class Vampire : MonoBehaviour
 
         Deactivate();
 
+        renderer.sprite = ReactionSprites[BurnStatusIndex - 1];
+        Human.Smile();
+
+        await UniTask.Delay(ReactionMillisecond);
+
         if (BurnStatusIndex >= DefaultSprites.Count)
         {
             await BurnFinished();
         } else
         {
-            renderer.sprite = ReactionSprites[BurnStatusIndex];
-            Human.Smile();
-
-            await UniTask.Delay(ReactionMillisecond);
-
             ResetSprite();
             Human.CloseCurtain();
         }
@@ -140,9 +141,8 @@ public class Vampire : MonoBehaviour
     private async Task BurnFinished()
     {
         renderer.sprite = LastBurnedSprite;
-        Human.Smile();
 
-        await UniTask.Delay(ReactionMillisecond);
+        await UniTask.Delay(LastReactionMillisecond);
 
         FinishGame();
     }
