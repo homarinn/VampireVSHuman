@@ -11,7 +11,7 @@ public class InputHandler : MonoBehaviour
     public static InputHandler Instance;
 
     private PlayerControls controls;
-    public Subject<Vector2> OnLeftClickSubject = new ();
+    public Subject<Unit> OnLeftClickSubject = new ();
 
     private void Awake()
     {
@@ -36,7 +36,7 @@ public class InputHandler : MonoBehaviour
 
     private void OnLeftClickStarted(InputAction.CallbackContext context)
     {
-        OnLeftClickSubject.OnNext(context.ReadValue<Vector2>());
+        OnLeftClickSubject.OnNext(Unit.Default);
     }
 
     private void OnEscape(InputAction.CallbackContext context)

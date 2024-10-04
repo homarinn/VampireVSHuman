@@ -126,6 +126,8 @@ public class Human : MonoBehaviour
             openCurtainSpritePair.Key.sprite = openCurtainSpritePair.Value;
         }
 
+        Deactivate();
+
         openCurtainTime.Value = elapsedTime;
     }
 
@@ -145,6 +147,8 @@ public class Human : MonoBehaviour
         {
             faintSpritePair.Key.sprite = faintSpritePair.Value;
         }
+
+        Deactivate();
 
         faintCurtainTime.Value = elapsedTime;
         nextOpenTime = GetRandomOpenTime(); // 仮で

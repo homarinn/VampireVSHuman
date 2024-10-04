@@ -42,9 +42,9 @@ public class Vampire : MonoBehaviour
 
     private void Start()
     {
-        InputHandler.Instance.OnLeftClickSubject.Where(_ => canInput).Subscribe(_ => Reflect());
-        Human.OpenCurtainTime.Subscribe(time => EnableReflect());
-        Human.CloseCurtainTime.Subscribe(time => Activate());
+        InputHandler.Instance.OnLeftClickSubject.Skip(1).Where(_ => canInput).Subscribe(_ => Reflect());
+        Human.OpenCurtainTime.Skip(1).Subscribe(time => EnableReflect());
+        Human.CloseCurtainTime.Skip(1).Subscribe(time => Activate());
         Activate();
     }
 
@@ -79,9 +79,10 @@ public class Vampire : MonoBehaviour
             return;
         }
 
-        elapsedTime += Time.deltaTime;
-
-        DisableInput();
+        if (canReflect)
+        {
+            elapsedTime += Time.deltaTime;
+        }
     }
 
     // private async UniTaskVoid LoopStart(CancellationToken token)
@@ -162,6 +163,7 @@ public class Vampire : MonoBehaviour
     {
         renderer.sprite = LastBurnedSprite;
         Human.Smile();
+        Human.Deactivate();
 
         await UniTask.Delay(ReactionMillisecond);
 
