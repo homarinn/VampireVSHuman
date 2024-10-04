@@ -440,7 +440,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Human: {fileID: 1026669257}
-  ReflectReceptionMillisecond: 500
+  ReflectReceptionMillisecond: 1000
   ReactionMillisecond: 3000
   DefaultSprites:
   - {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}

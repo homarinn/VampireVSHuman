@@ -63,8 +63,6 @@ public class Human : MonoBehaviour
     public void Activate()
     {
         nextOpenTime = GetRandomOpenTime();
-        // CancellationTokenSource = new();
-        // LoopStart(CancellationTokenSource.Token);
         isActive = true;
     }
 
@@ -91,33 +89,8 @@ public class Human : MonoBehaviour
 
     public void Deactivate()
     {
-        // CancellationTokenSource.Cancel();
         isActive = false;
     }
-
-    // private async UniTaskVoid LoopStart(CancellationToken token)
-    // {
-    //     // animator.Play("Default");
-
-    //     await UniTask.Yield();
-
-    //     while (!token.IsCancellationRequested)
-    //     {
-    //         elapsedTime += Time.deltaTime;
-    //         if (elapsedTime >= nextOpenTime)
-    //         {
-    //             if (UnityEngine.Random.value <= FaintRate)
-    //             {
-    //                 Faint();
-    //             } else
-    //             {
-    //                 OpenCurtain();
-    //             }
-    //         }
-
-    //         await UniTask.Yield();
-    //     }
-    // }
 
     public void OpenCurtain()
     {
@@ -157,6 +130,8 @@ public class Human : MonoBehaviour
 
         ResetSprite();
         nextOpenTime = GetRandomOpenTime();
+
+        Activate();
     }
 
     public float GetRandomOpenTime()

@@ -42,7 +42,7 @@ public class Vampire : MonoBehaviour
 
     private void Start()
     {
-        InputHandler.Instance.OnLeftClickSubject.Skip(1).Where(_ => canInput).Subscribe(_ => Reflect());
+        InputHandler.Instance.OnLeftClickSubject.Where(_ => canInput).Subscribe(_ => Reflect());
         Human.OpenCurtainTime.Skip(1).Subscribe(time => EnableReflect());
         Human.CloseCurtainTime.Skip(1).Subscribe(time => Activate());
         Activate();
@@ -51,8 +51,6 @@ public class Vampire : MonoBehaviour
     public void Activate()
     {
         EnableInput();
-        // CancellationTokenSource = new();
-        // LoopStart(CancellationTokenSource.Token);
         isActive = true;
         elapsedTime = 0f;
     }
@@ -61,7 +59,7 @@ public class Vampire : MonoBehaviour
     {
         DisableInput();
         DisableReflect();
-        // CancellationTokenSource.Cancel();
+        Human.Deactivate();
         isActive = false;
     }
 
@@ -74,7 +72,6 @@ public class Vampire : MonoBehaviour
 
         if (IsClosedReception(elapsedTime))
         {
-            Deactivate();
             Burn();
             return;
         }
@@ -85,27 +82,6 @@ public class Vampire : MonoBehaviour
         }
     }
 
-    // private async UniTaskVoid LoopStart(CancellationToken token)
-    // {
-    //     float elapsedTime = 0f;
-
-    //     // Destroyされるまで無限ループ
-    //     while (!token.IsCancellationRequested)
-    //     {
-    //         if (IsClosedReception(elapsedTime))
-    //         {
-    //             Deactivate();
-    //             Burn();
-    //             continue;
-    //         }
-
-    //         await UniTask.Yield();
-    //         elapsedTime += Time.deltaTime;
-    //     }
-
-    //     DisableInput();
-    // }
-
     private bool IsClosedReception(float elapsedTime)
     {
         return elapsedTime >= ((float) ReflectReceptionMillisecond) / 1000f;
@@ -113,6 +89,8 @@ public class Vampire : MonoBehaviour
 
     private async void Blight()
     {
+        Deactivate();
+
         renderer.sprite = ReflectSprites[BurnStatusIndex];
         Human.Blighted();
 
@@ -125,6 +103,8 @@ public class Vampire : MonoBehaviour
     private async void Burn()
     {
         BurnStatusIndex++;
+
+        Deactivate();
 
         if (BurnStatusIndex >= DefaultSprites.Count)
         {
@@ -145,11 +125,9 @@ public class Vampire : MonoBehaviour
     {
         if (canReflect)
         {
-            Deactivate();
             Blight();
         } else
         {
-            Deactivate();
             FinishGame();
         }
     }
@@ -163,7 +141,6 @@ public class Vampire : MonoBehaviour
     {
         renderer.sprite = LastBurnedSprite;
         Human.Smile();
-        Human.Deactivate();
 
         await UniTask.Delay(ReactionMillisecond);
 
@@ -192,11 +169,8 @@ public class Vampire : MonoBehaviour
 
     private void FinishGame()
     {
-        // CancellationTokenSource.Cancel();
-        // Human.CancellationTokenSource.Cancel();
+        Deactivate();
 
-        // ResetSprite();
-        // Human.ResetSprite();
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
 #else
