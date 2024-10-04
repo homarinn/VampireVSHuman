@@ -439,9 +439,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d13350a7acbbff409f4242e8b39aefe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Human: {fileID: 1026669257}
   ReflectReceptionMillisecond: 1000
+  PerfectReflectReceptionMillisecond: 500
   ReactionMillisecond: 3000
+  LastReactionMillisecond: 3000
   DefaultSprites:
   - {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
   - {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
@@ -451,10 +452,16 @@ MonoBehaviour:
   - {fileID: -2135585597343286014, guid: 5aa8b770bc43046bc8d993d0d5b7f4a5, type: 3}
   - {fileID: 3625043607559282579, guid: 19fb86013d8c24d6cb8410c0aadf30fa, type: 3}
   LastBurnedSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  GuardSprites:
+  - {fileID: 21300000, guid: 46e8f61d13f8b49c7b2ac6beb5788f2c, type: 3}
+  - {fileID: 21300000, guid: 46e8f61d13f8b49c7b2ac6beb5788f2c, type: 3}
+  - {fileID: 21300000, guid: 46e8f61d13f8b49c7b2ac6beb5788f2c, type: 3}
   ReflectSprites:
   - {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
   - {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
   - {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
+  IsGuarding: 0
+  Human: {fileID: 1026669257}
 --- !u!1 &1026669254
 GameObject:
   m_ObjectHideFlags: 0
@@ -559,6 +566,8 @@ MonoBehaviour:
   MaxOpenIntervalMillisecond: 5000
   FaintMillisecond: 500
   FaintRate: 0.25
+  MinOpenDurationMillisecond: 1000
+  MaxOpenDurationMillisecond: 3000
   OpenCurtainSpriteMap:
     itemList:
     - Key: {fileID: 1026669255}
@@ -573,6 +582,7 @@ MonoBehaviour:
       Value: {fileID: 21300000, guid: 5c81e841f99f744f997dfa12ce9c2a82, type: 3}
   BlightSprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   SmileSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  Vampire: {fileID: 990407643}
 --- !u!1 &1080975926
 GameObject:
   m_ObjectHideFlags: 0

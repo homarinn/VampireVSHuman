@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 public class Human : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class Human : MonoBehaviour
 
     public int FaintMillisecond = 500;
     public float FaintRate = 0.25f;
+
+    public int MinOpenDurationMillisecond = 1000;
+    public int MaxOpenDurationMillisecond = 3000;
 
     private ReactiveProperty<float> openCurtainTime = new(0);
     public IReadOnlyReactiveProperty<float> OpenCurtainTime => openCurtainTime;
@@ -34,11 +38,11 @@ public class Human : MonoBehaviour
 
     private float nextOpenTime = 0f;
 
-    private float elapsedTime = 0f;
-
     public CancellationTokenSource CancellationTokenSource = new();
 
     private bool isActive = false;
+
+    public Vampire Vampire;
 
     private void Awake()
     {
@@ -73,18 +77,17 @@ public class Human : MonoBehaviour
             return;
         }
 
-        if (elapsedTime >= nextOpenTime)
+        if (Time.time >= nextOpenTime)
         {
             if (UnityEngine.Random.value <= FaintRate)
             {
                 Faint();
             } else
             {
+                Deactivate();
                 OpenCurtain();
             }
         }
-
-        elapsedTime += Time.deltaTime;
     }
 
     public void Deactivate()
@@ -92,7 +95,7 @@ public class Human : MonoBehaviour
         isActive = false;
     }
 
-    public void OpenCurtain()
+    public async void OpenCurtain()
     {
         foreach (var openCurtainSpritePair in OpenCurtainSpriteMap)
         {
@@ -101,14 +104,23 @@ public class Human : MonoBehaviour
 
         Deactivate();
 
-        openCurtainTime.Value = elapsedTime;
+        openCurtainTime.Value = Time.time;
+
+        int openDuration = UnityEngine.Random.Range(MinOpenDurationMillisecond, MaxOpenDurationMillisecond+1);
+
+        await UniTask.Delay(openDuration);
+
+        if (!isActive && Vampire.IsGuarding)
+        {
+            CloseCurtain();
+        }
     }
 
     public void CloseCurtain()
     {
         ResetSprite();
 
-        closeCurtainTime.Value = elapsedTime;
+        closeCurtainTime.Value = Time.time;
         nextOpenTime = GetRandomOpenTime();
 
         Activate();
@@ -123,7 +135,7 @@ public class Human : MonoBehaviour
 
         Deactivate();
 
-        faintCurtainTime.Value = elapsedTime;
+        faintCurtainTime.Value = Time.time;
         nextOpenTime = GetRandomOpenTime(); // 仮で
 
         await UniTask.Delay(FaintMillisecond);

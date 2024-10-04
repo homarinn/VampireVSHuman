@@ -15,26 +15,31 @@ public class Vampire : MonoBehaviour
 {
     private SpriteRenderer renderer;
 
-    public Human Human;
-
     public int ReflectReceptionMillisecond = 1000;
+    public int PerfectReflectReceptionMillisecond = 500;
     public int ReactionMillisecond = 3000;
     public int LastReactionMillisecond = 3000;
+
+    private float shouldReflectTime = 0f;
+    private float guardTime = 0f;
 
     public List<Sprite> DefaultSprites = new ();
     public List<Sprite> ReactionSprites = new ();
     public Sprite LastBurnedSprite;
+    public List<Sprite> GuardSprites = new ();
     public List<Sprite> ReflectSprites = new ();
     private int BurnStatusIndex = 0;
 
     public CancellationTokenSource CancellationTokenSource = new();
 
-    private float elapsedTime = 0f;
-
     private bool canReflect = false;
     private bool canInput = false;
 
+    public bool IsGuarding = false;
+
     private bool isActive = false;
+
+    public Human Human;
 
     private void Awake()
     {
@@ -43,17 +48,22 @@ public class Vampire : MonoBehaviour
 
     private void Start()
     {
-        InputHandler.Instance.OnLeftClickSubject.Where(_ => canInput).Subscribe(_ => Reflect());
-        Human.OpenCurtainTime.Skip(1).Subscribe(time => EnableReflect());
+        InputHandler.Instance.OnLeftClickSubject.Where(_ => canInput).Subscribe(_ => Guard());
+        Human.OpenCurtainTime.Skip(1).Subscribe(time => Blighted(time));
         Human.CloseCurtainTime.Skip(1).Subscribe(time => Activate());
         Activate();
     }
 
     public void Activate()
     {
+        if (!IsGuarding)
+        {
+            ResetSprite();
+        }
+
         EnableInput();
+        DisableReflect();
         isActive = true;
-        elapsedTime = 0f;
     }
 
     public void Deactivate()
@@ -61,6 +71,7 @@ public class Vampire : MonoBehaviour
         DisableInput();
         DisableReflect();
         Human.Deactivate();
+        IsGuarding = false;
         isActive = false;
     }
 
@@ -71,34 +82,16 @@ public class Vampire : MonoBehaviour
             return;
         }
 
-        if (IsClosedReception(elapsedTime))
+        if (canReflect && !IsGuarding && IsClosedReception(Time.time - shouldReflectTime))
         {
             Burn();
             return;
-        }
-
-        if (canReflect)
-        {
-            elapsedTime += Time.deltaTime;
         }
     }
 
     private bool IsClosedReception(float elapsedTime)
     {
-        return elapsedTime >= ((float) ReflectReceptionMillisecond) / 1000f;
-    }
-
-    private async void Blight()
-    {
-        Deactivate();
-
-        renderer.sprite = ReflectSprites[BurnStatusIndex];
-        Human.Blighted();
-
-        await UniTask.Delay(ReactionMillisecond);
-
-        ResetSprite();
-        Human.CloseCurtain();
+        return elapsedTime >= ((float) Mathf.Min(ReflectReceptionMillisecond, Human.MinOpenDurationMillisecond)) / 1000f;
     }
 
     private async void Burn()
@@ -122,15 +115,50 @@ public class Vampire : MonoBehaviour
         }
     }
 
-    private void Reflect()
+    private void Blighted(float time)
     {
-        if (canReflect)
+        EnableReflect();
+        shouldReflectTime = time;
+
+        if (IsGuarding && IsPerfect())
         {
             Blight();
+        }
+    }
+
+    private void Guard()
+    {
+        ToggleGuard();
+
+        if (IsGuarding)
+        {
+            guardTime = Time.time;
+
+            if (canReflect && IsPerfect())
+            {
+                Blight();
+            } else
+            {
+                renderer.sprite = GuardSprites[BurnStatusIndex];
+            }
         } else
         {
-            FinishGame();
+            guardTime = 0f;
+            renderer.sprite = DefaultSprites[BurnStatusIndex];
         }
+    }
+
+    private async void Blight()
+    {
+        Deactivate();
+
+        renderer.sprite = ReflectSprites[BurnStatusIndex];
+        Human.Blighted();
+
+        await UniTask.Delay(ReactionMillisecond);
+
+        ResetSprite();
+        Human.CloseCurtain();
     }
 
     private void ResetSprite()
@@ -165,6 +193,16 @@ public class Vampire : MonoBehaviour
     private void DisableReflect()
     {
         canReflect = false;
+    }
+
+    private void ToggleGuard()
+    {
+        IsGuarding = !IsGuarding;
+    }
+
+    private bool IsPerfect()
+    {
+        return Mathf.Abs(guardTime - shouldReflectTime) * 1000f <= PerfectReflectReceptionMillisecond;
     }
 
     private void FinishGame()
