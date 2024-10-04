@@ -10,14 +10,14 @@ public class Human : MonoBehaviour
 {
     private SpriteRenderer renderer;
 
-    public int MinOpenIntervalMillisecond = 1000;
-    public int MaxOpenIntervalMillisecond = 5000;
+    [Header("カーテンを開けるインターバルの最小時間")] public int MinOpenIntervalMillisecond = 1000;
+    [Header("カーテンを開けるインターバルの最大時間")] public int MaxOpenIntervalMillisecond = 5000;
 
-    public int FaintMillisecond = 500;
-    public float FaintRate = 0.25f;
+    [Header("フェイント画像を表示する時間")] public int FaintMillisecond = 500;
+    [Header("フェイントする確率")] public float FaintRate = 0.25f;
 
-    public int MinOpenDurationMillisecond = 1000;
-    public int MaxOpenDurationMillisecond = 3000;
+    [Header("カーテンを何秒開けるか(最小)")] public int MinOpenDurationMillisecond = 1000;
+    [Header("カーテンを何秒開けるか(最大)")] public int MaxOpenDurationMillisecond = 3000;
 
     private ReactiveProperty<float> openCurtainTime = new(0);
     public IReadOnlyReactiveProperty<float> OpenCurtainTime => openCurtainTime;
@@ -28,13 +28,13 @@ public class Human : MonoBehaviour
     private ReactiveProperty<float> faintCurtainTime = new(0);
     public IReadOnlyReactiveProperty<float> FaintCurtainTime => faintCurtainTime;
 
-    public SerializedDictionary<SpriteRenderer, Sprite> OpenCurtainSpriteMap = new();
+    [Header("カーテンを開けた時の画像登録")] public SerializedDictionary<SpriteRenderer, Sprite> OpenCurtainSpriteMap = new();
     private Dictionary<SpriteRenderer, Sprite> defaultSpriteMap = new();
 
-    public SerializedDictionary<SpriteRenderer, Sprite> FaintSpriteMap = new();
+    [Header("フェイント時の画像登録")] public SerializedDictionary<SpriteRenderer, Sprite> FaintSpriteMap = new();
 
-    public Sprite BlightSprite;
-    public Sprite SmileSprite;
+    [Header("反射された時の画像")] public Sprite BlightSprite;
+    [Header("吸血鬼がガードに失敗した時の画像")] public Sprite SmileSprite;
 
     private float nextOpenTime = 0f;
 
