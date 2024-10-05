@@ -638,6 +638,9 @@ MonoBehaviour:
   - {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
   - {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
   - {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
+  IsClearSecondIncrease: 1
+  IsClearGageExpand: 0
+  IncreaseClearSecond: 5
   Human: {fileID: 1026669257}
   ClearGageSlider: {fileID: 1583281931}
 --- !u!1 &1026669254
@@ -1080,9 +1083,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -760, y: 0}
+  m_AnchoredPosition: {x: -760, y: -360}
   m_SizeDelta: {x: 180, y: 720}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1583281931
 MonoBehaviour:
   m_ObjectHideFlags: 0

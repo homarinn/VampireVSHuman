@@ -43,6 +43,13 @@ public class Vampire : MonoBehaviour
 
     private bool isActive = false;
 
+    [Header("Perfectでクリア時間伸びるか")] public bool IsClearSecondIncrease = false;
+    [Header("クリアゲージ自体が伸びるか")] public bool IsClearGageExpand = false;
+    [Header("クリア時間の伸びる量")] public float IncreaseClearSecond = 3f;
+    private float DefaultClearGageLength = 0f;
+    private float InitialClearSecond = 0f;
+    private RectTransform ClearGageRectTransform;
+
     public Human Human;
     public Slider ClearGageSlider;
 
@@ -50,6 +57,13 @@ public class Vampire : MonoBehaviour
     {
         renderer = GetComponent<SpriteRenderer>();
         ClearGageSlider.maxValue = ClearSecond;
+
+        if (IsClearSecondIncrease)
+        {
+            ClearGageRectTransform = ClearGageSlider.GetComponent<RectTransform>();
+            DefaultClearGageLength = ClearGageRectTransform.sizeDelta.y;
+            InitialClearSecond = ClearSecond;
+        }
     }
 
     private void Start()
@@ -182,7 +196,21 @@ public class Vampire : MonoBehaviour
 
         await UniTask.Delay(ReactionMillisecond);
 
-        elapsedTime += ReactionMillisecond / 1000f;
+        // elapsedTime += ReactionMillisecond / 1000f;
+
+        if (IsClearSecondIncrease)
+        {
+            ClearSecond += IncreaseClearSecond;
+            ClearGageSlider.maxValue = ClearSecond;
+            if (IsClearGageExpand)
+            {
+                float afterLength = DefaultClearGageLength * ClearSecond / InitialClearSecond;
+                Vector2 sizeDelta = ClearGageRectTransform.sizeDelta;
+                sizeDelta.y = afterLength;
+                ClearGageRectTransform.sizeDelta = sizeDelta;
+            }
+        }
+
         ResetSprite();
         Human.CloseCurtain();
     }
