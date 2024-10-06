@@ -9,7 +9,7 @@ public class Human : MonoBehaviour
 {
     private SpriteRenderer renderer;
 
-    [Header("事前の挙動を何回するか")] public int PreambleCount = 2;
+    [Header("事前挙動を何回するか")] public int PreambleCount = 2;
     private int currentPreambleCount = 0;
 
     [Header("事前挙動をするインターバルの最小時間")] public int MinPreambleIntervalMillisecond = 1000;
@@ -31,6 +31,8 @@ public class Human : MonoBehaviour
     [NonSerialized] public bool IsSmiled = false;
     [Header("大笑いする時間")] public int SmileMillisecond = 2000;
 
+    [Header("最初に事前挙動をするまでの時間")] public int FirstPreambleMillisecond = 2000;
+
     private ReactiveProperty<float> openCurtainTime = new(0);
     public IReadOnlyReactiveProperty<float> OpenCurtainTime => openCurtainTime;
 
@@ -42,7 +44,7 @@ public class Human : MonoBehaviour
 
     [NonSerialized] public bool IsOpenCurtain = false;
 
-    [Header("事前の挙動の画像")] public Sprite PreambleSprite;
+    [Header("事前挙動の画像")] public Sprite PreambleSprite;
 
     [Header("カーテンを開けた時の画像")] public SerializedDictionary<SpriteRenderer, Sprite> OpenCurtainSpriteMap = new();
     private Dictionary<SpriteRenderer, Sprite> defaultSpriteMap = new();
@@ -74,7 +76,7 @@ public class Human : MonoBehaviour
 
     private void Start()
     {
-        preambleIntervalMillisecond = UnityEngine.Random.Range(MinPreambleIntervalMillisecond, MaxPreambleIntervalMillisecond+1);
+        preambleIntervalMillisecond = FirstPreambleMillisecond;
         nextPreambleTime = GetNextPreambleTime();
         Activate();
     }
