@@ -743,12 +743,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e910436362efecc49b2c29802b754f2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinOpenIntervalMillisecond: 1000
-  MaxOpenIntervalMillisecond: 5000
-  FaintMillisecond: 500
-  FaintRate: 0.25
+  PreambleCount: 2
+  PreambleIntervalMillisecond: 1000
+  PreambleDurationMillisecond: 1000
   MinOpenDurationMillisecond: 1000
   MaxOpenDurationMillisecond: 3000
+  FaintMillisecond: 500
+  FaintRate: 0.25
+  PreambleSprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
   OpenCurtainSpriteMap:
     itemList:
     - Key: {fileID: 1026669255}
