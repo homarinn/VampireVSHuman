@@ -9,14 +9,22 @@ public class Human : MonoBehaviour
 {
     private SpriteRenderer renderer;
 
-    [Header("カーテンを開けるインターバルの最小時間")] public int MinOpenIntervalMillisecond = 1000;
-    [Header("カーテンを開けるインターバルの最大時間")] public int MaxOpenIntervalMillisecond = 5000;
+    [Header("事前の挙動を何回するか")] public int PreambleCount = 2;
+    private int currentPreambleCount = 0;
+    [Header("挙動の間隔")] public int PreambleIntervalMillisecond = 1000;
+    private float lastPreambleTime = 0f;
+    [Header("挙動画像を何ミリ秒表示するか")] public int PreambleDurationMillisecond = 1000;
+    private float nextPreambleTime = 0f;
+
+    // [Header("カーテンを開けるインターバルの最小時間")] public int MinOpenIntervalMillisecond = 1000;
+    // [Header("カーテンを開けるインターバルの最大時間")] public int MaxOpenIntervalMillisecond = 5000;
+
+    [Header("カーテンを何ミリ秒開けるか(最小)")] public int MinOpenDurationMillisecond = 1000;
+    [Header("カーテンを何ミリ秒開けるか(最大)")] public int MaxOpenDurationMillisecond = 3000;
+
 
     [Header("フェイント画像を表示する時間")] public int FaintMillisecond = 500;
     [Header("フェイントする確率")] public float FaintRate = 0.25f;
-
-    [Header("カーテンを何秒開けるか(最小)")] public int MinOpenDurationMillisecond = 1000;
-    [Header("カーテンを何秒開けるか(最大)")] public int MaxOpenDurationMillisecond = 3000;
 
     private ReactiveProperty<float> openCurtainTime = new(0);
     public IReadOnlyReactiveProperty<float> OpenCurtainTime => openCurtainTime;
@@ -27,6 +35,8 @@ public class Human : MonoBehaviour
     private ReactiveProperty<float> faintCurtainTime = new(0);
     public IReadOnlyReactiveProperty<float> FaintCurtainTime => faintCurtainTime;
 
+    [Header("事前の挙動の画像登録")] public Sprite PreambleSprite;
+
     [Header("カーテンを開けた時の画像登録")] public SerializedDictionary<SpriteRenderer, Sprite> OpenCurtainSpriteMap = new();
     private Dictionary<SpriteRenderer, Sprite> defaultSpriteMap = new();
 
@@ -35,7 +45,7 @@ public class Human : MonoBehaviour
     [Header("反射された時の画像")] public Sprite BlightSprite;
     [Header("吸血鬼がガードに失敗した時の画像")] public Sprite SmileSprite;
 
-    private float nextOpenTime = 0f;
+    // private float nextOpenTime = 0f;
 
     public CancellationTokenSource CancellationTokenSource = new();
 
@@ -65,7 +75,8 @@ public class Human : MonoBehaviour
 
     public void Activate()
     {
-        nextOpenTime = GetRandomOpenTime();
+        // nextOpenTime = GetRandomOpenTime();
+        nextPreambleTime = GetNextPreambleTime();
         isActive = true;
     }
 
@@ -76,17 +87,43 @@ public class Human : MonoBehaviour
             return;
         }
 
-        if (Time.time >= nextOpenTime)
+        if (Time.time >= nextPreambleTime)
         {
-            if (UnityEngine.Random.value <= FaintRate)
+            if (currentPreambleCount == PreambleCount)
             {
-                Faint();
+                currentPreambleCount = 0;
+
+                // if (UnityEngine.Random.value <= FaintRate)
+                // {
+                //     Faint();
+                // } else
+                // {
+                //     Deactivate();
+                //     OpenCurtain();
+                // }
+
+                if (UnityEngine.Random.value > FaintRate)
+                {
+                    Deactivate();
+                    OpenCurtain();
+                }
             } else
             {
-                Deactivate();
-                OpenCurtain();
+                Preamble();
             }
         }
+
+        // if (Time.time >= nextOpenTime)
+        // {
+        //     if (UnityEngine.Random.value <= FaintRate)
+        //     {
+        //         Faint();
+        //     } else
+        //     {
+        //         Deactivate();
+        //         OpenCurtain();
+        //     }
+        // }
     }
 
     public void Deactivate()
@@ -120,7 +157,8 @@ public class Human : MonoBehaviour
         ResetSprite();
 
         closeCurtainTime.Value = Time.time;
-        nextOpenTime = GetRandomOpenTime();
+        // nextOpenTime = GetRandomOpenTime();
+        nextPreambleTime = GetNextPreambleTime();
 
         Activate();
     }
@@ -134,22 +172,46 @@ public class Human : MonoBehaviour
 
         Deactivate();
 
-        faintCurtainTime.Value = Time.time;
-        nextOpenTime = GetRandomOpenTime(); // 仮で
+        // nextOpenTime = GetRandomOpenTime(); // 仮で
 
         await UniTask.Delay(FaintMillisecond);
 
+        faintCurtainTime.Value = Time.time;
+
         ResetSprite();
-        nextOpenTime = GetRandomOpenTime();
+        // nextOpenTime = GetRandomOpenTime();
+        nextPreambleTime = GetNextPreambleTime();
 
         Activate();
     }
 
-    public float GetRandomOpenTime()
+    // public float GetRandomOpenTime()
+    // {
+    //     float millisecond = UnityEngine.Random.Range(MinOpenIntervalMillisecond, MaxOpenIntervalMillisecond+1);
+    //     float referenceTime = Mathf.Max(closeCurtainTime.Value, faintCurtainTime.Value);
+    //     return referenceTime + (millisecond / 1000f);
+    // }
+
+    public float GetNextPreambleTime()
     {
-        float millisecond = UnityEngine.Random.Range(MinOpenIntervalMillisecond, MaxOpenIntervalMillisecond+1);
-        float referenceTime = Mathf.Max(closeCurtainTime.Value, faintCurtainTime.Value);
-        return referenceTime + (millisecond / 1000f);
+        float referenceTime = Mathf.Max(closeCurtainTime.Value, faintCurtainTime.Value, lastPreambleTime);
+        return referenceTime + (PreambleIntervalMillisecond / 1000f);
+    }
+
+    public async void Preamble()
+    {
+        renderer.sprite = PreambleSprite;
+        currentPreambleCount++;
+        Deactivate();
+
+        await UniTask.Delay(PreambleDurationMillisecond);
+
+        lastPreambleTime = Time.time;
+
+        ResetSprite();
+        nextPreambleTime = GetNextPreambleTime();
+
+        Activate();
     }
 
     public void Blighted()

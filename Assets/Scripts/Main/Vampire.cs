@@ -173,13 +173,15 @@ public class Vampire : MonoBehaviour
         {
             guardTime = Time.time;
 
-            if (canReflect && IsPerfect())
-            {
-                Blight();
-            } else
-            {
-                renderer.sprite = GuardSprites[BurnStatusIndex];
-            }
+            // if (canReflect && IsPerfect())
+            // {
+            //     Blight();
+            // } else
+            // {
+            //     renderer.sprite = GuardSprites[BurnStatusIndex];
+            // }
+
+            renderer.sprite = GuardSprites[BurnStatusIndex];
         } else
         {
             guardTime = 0f;
