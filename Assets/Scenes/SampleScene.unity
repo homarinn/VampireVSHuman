@@ -616,31 +616,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d13350a7acbbff409f4242e8b39aefe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ReflectReceptionMillisecond: 1000
-  PerfectReflectReceptionMillisecond: 500
-  ReactionMillisecond: 3000
-  LastReactionMillisecond: 3000
   ClearSecond: 30
-  DefaultSprites:
-  - {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
-  - {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  - {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  ReactionSprites:
-  - {fileID: -712631045867808456, guid: b670ab75dde984907b8570040daa08c5, type: 3}
-  - {fileID: -2135585597343286014, guid: 5aa8b770bc43046bc8d993d0d5b7f4a5, type: 3}
-  - {fileID: 3625043607559282579, guid: 19fb86013d8c24d6cb8410c0aadf30fa, type: 3}
-  LastBurnedSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  GuardSprites:
-  - {fileID: 21300000, guid: 46e8f61d13f8b49c7b2ac6beb5788f2c, type: 3}
-  - {fileID: 21300000, guid: 46e8f61d13f8b49c7b2ac6beb5788f2c, type: 3}
-  - {fileID: 21300000, guid: 46e8f61d13f8b49c7b2ac6beb5788f2c, type: 3}
-  ReflectSprites:
-  - {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
-  - {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
-  - {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
-  IsClearSecondIncrease: 0
-  IsClearGageExpand: 0
-  IncreaseClearSecond: 5
+  DefaultSprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
+  GuardSprite: {fileID: -712631045867808456, guid: b670ab75dde984907b8570040daa08c5, type: 3}
+  BurnedSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  BurnedMillisecond: 2000
   Human: {fileID: 1026669257}
   ClearGageSlider: {fileID: 1583281931}
 --- !u!1 &1026669254
@@ -744,8 +724,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PreambleCount: 2
-  PreambleIntervalMillisecond: 1000
-  PreambleDurationMillisecond: 1000
+  MinPreambleIntervalMillisecond: 500
+  MaxPreambleIntervalMillisecond: 2000
+  PreambleDurationMillisecond: 500
   MinOpenDurationMillisecond: 1000
   MaxOpenDurationMillisecond: 3000
   FaintMillisecond: 500
@@ -756,13 +737,13 @@ MonoBehaviour:
     - Key: {fileID: 1026669255}
       Value: {fileID: 21300000, guid: 950832395ec754ba48ab1cffa214cec0, type: 3}
     - Key: {fileID: 1097096398}
-      Value: {fileID: 21300000, guid: a7509656986904778b9b80babc278b98, type: 3}
+      Value: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   FaintSpriteMap:
     itemList:
     - Key: {fileID: 1026669255}
-      Value: {fileID: 21300000, guid: a7509656986904778b9b80babc278b98, type: 3}
+      Value: {fileID: 21300000, guid: 950832395ec754ba48ab1cffa214cec0, type: 3}
     - Key: {fileID: 1097096398}
-      Value: {fileID: 21300000, guid: 5c81e841f99f744f997dfa12ce9c2a82, type: 3}
+      Value: {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
   BlightSprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   SmileSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   Vampire: {fileID: 990407643}

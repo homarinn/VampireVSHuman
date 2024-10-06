@@ -15,40 +15,19 @@ public class Vampire : MonoBehaviour
 {
     private SpriteRenderer renderer;
 
-    [Header("何ミリ秒以内にガードすれば焼けないか")] public int ReflectReceptionMillisecond = 1000;
-    [Header("何ミリ秒以内にガードすれば反射できるか")] public int PerfectReflectReceptionMillisecond = 500;
-    [Header("焼けた時や反射した時の画像を何ミリ秒表示するか")] public int ReactionMillisecond = 3000;
-    [Header("クリア時や3回失敗後の画像を何ミリ秒表示するか")] public int LastReactionMillisecond = 3000;
-
-    private float shouldReflectTime = 0f;
-    private float guardTime = 0f;
-
     [Header("何秒食べればクリアするか")] public float ClearSecond = 100;
-    private float elapsedTime = 0f;
-    private float allElapsedTime = 0f;
 
-    [Header("食事中の画像")] public List<Sprite> DefaultSprites = new ();
-    [Header("焼けてる時の画像")] public List<Sprite> ReactionSprites = new ();
-    [Header("3回失敗後に表示する画像")] public Sprite LastBurnedSprite;
-    [Header("ガード時に表示する画像")] public List<Sprite> GuardSprites = new ();
-    [Header("反射時に表示する画像")] public List<Sprite> ReflectSprites = new ();
-    private int BurnStatusIndex = 0;
+    [Header("食事中の画像")] public Sprite DefaultSprite;
+    [Header("ガード時に表示する画像")] public Sprite GuardSprite;
 
-    public CancellationTokenSource CancellationTokenSource = new();
+    [Header("焼けた画像")] public Sprite BurnedSprite;
+    [Header("焼けた画像を何ミリ秒表示するか")] public int BurnedMillisecond = 2000;
 
-    private bool canReflect = false;
     private bool canInput = false;
 
     [NonSerialized] public bool IsGuarding = false;
 
     private bool isActive = false;
-
-    [Header("Perfectでクリア時間伸びるか")] public bool IsClearSecondIncrease = false;
-    [Header("クリアゲージ自体が伸びるか")] public bool IsClearGageExpand = false;
-    [Header("クリア時間の伸びる量")] public float IncreaseClearSecond = 3f;
-    private float DefaultClearGageLength = 0f;
-    private float InitialClearSecond = 0f;
-    private RectTransform ClearGageRectTransform;
 
     public Human Human;
     public Slider ClearGageSlider;
@@ -57,22 +36,14 @@ public class Vampire : MonoBehaviour
     {
         renderer = GetComponent<SpriteRenderer>();
         ClearGageSlider.maxValue = ClearSecond;
-
-        if (IsClearSecondIncrease)
-        {
-            ClearGageRectTransform = ClearGageSlider.GetComponent<RectTransform>();
-            DefaultClearGageLength = ClearGageRectTransform.sizeDelta.y;
-            InitialClearSecond = ClearSecond;
-        }
     }
 
     private void Start()
     {
         InputHandler.Instance.OnLeftClickSubject.Where(_ => canInput).Subscribe(_ => Guard());
-        Human.OpenCurtainTime.Skip(1).Subscribe(time => Blighted(time));
+        Human.OpenCurtainTime.Skip(1).Subscribe(time => Blighted());
         Human.CloseCurtainTime.Skip(1).Subscribe(time => Activate());
 
-        allElapsedTime = 0;
         Activate();
     }
 
@@ -84,84 +55,65 @@ public class Vampire : MonoBehaviour
         }
 
         EnableInput();
-        DisableReflect();
+
         isActive = true;
     }
 
     public void Deactivate()
     {
         DisableInput();
-        DisableReflect();
         Human.Deactivate();
         IsGuarding = false;
+
         isActive = false;
     }
 
     private void Update()
     {
-        allElapsedTime += Time.deltaTime;
-
         if (!isActive)
         {
             return;
         }
 
-        if (canReflect && !IsGuarding && IsClosedReception(Time.time - shouldReflectTime))
+        if (Human.IsOpenCurtain && !IsGuarding)
         {
             Burn();
-            return;
         }
 
         if (!IsGuarding)
         {
-            elapsedTime += Time.deltaTime;
-            ClearGageSlider.value = elapsedTime;
-
-            if (elapsedTime >= ClearSecond)
+            if (Human.IsOpenCurtain)
             {
-                ClearGageSlider.value = ClearSecond;
+                Burn();
+            } else
+            {
+                ClearGageSlider.value += Time.deltaTime;
 
-                // TODO: クリア処理
-                Debug.Log(allElapsedTime);
-                FinishGame();
+                if (ClearGageSlider.value >= ClearSecond)
+                {
+                    ShowResult();
+                }
             }
         }
     }
 
-    private bool IsClosedReception(float elapsedTime)
-    {
-        return elapsedTime >= ((float) Mathf.Min(ReflectReceptionMillisecond, Human.MinOpenDurationMillisecond)) / 1000f;
-    }
-
     private async void Burn()
     {
-        BurnStatusIndex++;
-
         Deactivate();
 
-        renderer.sprite = ReactionSprites[BurnStatusIndex - 1];
-        Human.Smile();
+        renderer.sprite = BurnedSprite;
 
-        await UniTask.Delay(ReactionMillisecond);
+        await UniTask.Delay(BurnedMillisecond);
 
-        if (BurnStatusIndex >= DefaultSprites.Count)
-        {
-            await BurnFinished();
-        } else
-        {
-            ResetSprite();
-            Human.CloseCurtain();
-        }
+        FinishGame();
     }
 
-    private void Blighted(float time)
+    private void Blighted()
     {
-        EnableReflect();
-        shouldReflectTime = time;
-
-        if (IsGuarding && IsPerfect())
+        if (!IsGuarding)
         {
-            Blight();
+            // 即死
+            Burn();
         }
     }
 
@@ -171,65 +123,16 @@ public class Vampire : MonoBehaviour
 
         if (IsGuarding)
         {
-            guardTime = Time.time;
-
-            // if (canReflect && IsPerfect())
-            // {
-            //     Blight();
-            // } else
-            // {
-            //     renderer.sprite = GuardSprites[BurnStatusIndex];
-            // }
-
-            renderer.sprite = GuardSprites[BurnStatusIndex];
+            renderer.sprite = GuardSprite;
         } else
         {
-            guardTime = 0f;
-            renderer.sprite = DefaultSprites[BurnStatusIndex];
+            ResetSprite();
         }
-    }
-
-    private async void Blight()
-    {
-        Deactivate();
-
-        renderer.sprite = ReflectSprites[BurnStatusIndex];
-        Human.Blighted();
-
-        await UniTask.Delay(ReactionMillisecond);
-
-        if (IsClearSecondIncrease)
-        {
-            ClearSecond += IncreaseClearSecond;
-            ClearGageSlider.maxValue = ClearSecond;
-            if (IsClearGageExpand)
-            {
-                float afterLength = DefaultClearGageLength * ClearSecond / InitialClearSecond;
-                Vector2 sizeDelta = ClearGageRectTransform.sizeDelta;
-                sizeDelta.y = afterLength;
-                ClearGageRectTransform.sizeDelta = sizeDelta;
-            }
-        } else
-        {
-            elapsedTime += ReactionMillisecond / 1000f;
-        }
-
-        ResetSprite();
-        Human.CloseCurtain();
     }
 
     private void ResetSprite()
     {
-        renderer.sprite = DefaultSprites[BurnStatusIndex];
-    }
-
-    private async Task BurnFinished()
-    {
-        renderer.sprite = LastBurnedSprite;
-
-        await UniTask.Delay(LastReactionMillisecond);
-
-        FinishGame();
+        renderer.sprite = DefaultSprite;
     }
 
     private void EnableInput()
@@ -242,30 +145,19 @@ public class Vampire : MonoBehaviour
         canInput = false;
     }
 
-    private void EnableReflect()
-    {
-        canReflect = true;
-    }
-
-    private void DisableReflect()
-    {
-        canReflect = false;
-    }
-
     private void ToggleGuard()
     {
         IsGuarding = !IsGuarding;
     }
 
-    private bool IsPerfect()
+    private void ShowResult()
     {
-        return Mathf.Abs(guardTime - shouldReflectTime) * 1000f <= PerfectReflectReceptionMillisecond;
+        Deactivate();
+        FinishGame();
     }
 
     private void FinishGame()
     {
-        Deactivate();
-
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
 #else

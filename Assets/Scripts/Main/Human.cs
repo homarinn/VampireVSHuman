@@ -1,9 +1,9 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEngine;
 using Cysharp.Threading.Tasks;
 using UniRx;
-using System.Threading.Tasks;
 
 public class Human : MonoBehaviour
 {
@@ -11,17 +11,18 @@ public class Human : MonoBehaviour
 
     [Header("事前の挙動を何回するか")] public int PreambleCount = 2;
     private int currentPreambleCount = 0;
-    [Header("挙動の間隔")] public int PreambleIntervalMillisecond = 1000;
-    private float lastPreambleTime = 0f;
-    [Header("挙動画像を何ミリ秒表示するか")] public int PreambleDurationMillisecond = 1000;
-    private float nextPreambleTime = 0f;
 
-    // [Header("カーテンを開けるインターバルの最小時間")] public int MinOpenIntervalMillisecond = 1000;
-    // [Header("カーテンを開けるインターバルの最大時間")] public int MaxOpenIntervalMillisecond = 5000;
+    [Header("事前挙動をするインターバルの最小時間")] public int MinPreambleIntervalMillisecond = 1000;
+    [Header("事前挙動をするインターバルの最大時間")] public int MaxPreambleIntervalMillisecond = 3000;
+    private int preambleIntervalMillisecond = 0;
+
+    [Header("挙動画像を何ミリ秒表示するか")] public int PreambleDurationMillisecond = 500;
+
+    private float lastPreambleTime = 0f;
+    private float nextPreambleTime = 0f;
 
     [Header("カーテンを何ミリ秒開けるか(最小)")] public int MinOpenDurationMillisecond = 1000;
     [Header("カーテンを何ミリ秒開けるか(最大)")] public int MaxOpenDurationMillisecond = 3000;
-
 
     [Header("フェイント画像を表示する時間")] public int FaintMillisecond = 500;
     [Header("フェイントする確率")] public float FaintRate = 0.25f;
@@ -35,6 +36,8 @@ public class Human : MonoBehaviour
     private ReactiveProperty<float> faintCurtainTime = new(0);
     public IReadOnlyReactiveProperty<float> FaintCurtainTime => faintCurtainTime;
 
+    [NonSerialized] public bool IsOpenCurtain = false;
+
     [Header("事前の挙動の画像登録")] public Sprite PreambleSprite;
 
     [Header("カーテンを開けた時の画像登録")] public SerializedDictionary<SpriteRenderer, Sprite> OpenCurtainSpriteMap = new();
@@ -44,8 +47,6 @@ public class Human : MonoBehaviour
 
     [Header("反射された時の画像")] public Sprite BlightSprite;
     [Header("吸血鬼がガードに失敗した時の画像")] public Sprite SmileSprite;
-
-    // private float nextOpenTime = 0f;
 
     public CancellationTokenSource CancellationTokenSource = new();
 
@@ -70,13 +71,13 @@ public class Human : MonoBehaviour
 
     private void Start()
     {
+        preambleIntervalMillisecond = UnityEngine.Random.Range(MinPreambleIntervalMillisecond, MaxPreambleIntervalMillisecond+1);
+        nextPreambleTime = GetNextPreambleTime();
         Activate();
     }
 
     public void Activate()
     {
-        // nextOpenTime = GetRandomOpenTime();
-        nextPreambleTime = GetNextPreambleTime();
         isActive = true;
     }
 
@@ -92,17 +93,12 @@ public class Human : MonoBehaviour
             if (currentPreambleCount == PreambleCount)
             {
                 currentPreambleCount = 0;
+                preambleIntervalMillisecond = UnityEngine.Random.Range(MinPreambleIntervalMillisecond, MaxPreambleIntervalMillisecond+1);
 
-                // if (UnityEngine.Random.value <= FaintRate)
-                // {
-                //     Faint();
-                // } else
-                // {
-                //     Deactivate();
-                //     OpenCurtain();
-                // }
-
-                if (UnityEngine.Random.value > FaintRate)
+                if (UnityEngine.Random.value <= FaintRate)
+                {
+                    Faint();
+                } else
                 {
                     Deactivate();
                     OpenCurtain();
@@ -112,18 +108,6 @@ public class Human : MonoBehaviour
                 Preamble();
             }
         }
-
-        // if (Time.time >= nextOpenTime)
-        // {
-        //     if (UnityEngine.Random.value <= FaintRate)
-        //     {
-        //         Faint();
-        //     } else
-        //     {
-        //         Deactivate();
-        //         OpenCurtain();
-        //     }
-        // }
     }
 
     public void Deactivate()
@@ -133,6 +117,8 @@ public class Human : MonoBehaviour
 
     public async void OpenCurtain()
     {
+        IsOpenCurtain = true;
+
         foreach (var openCurtainSpritePair in OpenCurtainSpriteMap)
         {
             openCurtainSpritePair.Key.sprite = openCurtainSpritePair.Value;
@@ -154,12 +140,12 @@ public class Human : MonoBehaviour
 
     public void CloseCurtain()
     {
-        ResetSprite();
+        IsOpenCurtain = false;
 
         closeCurtainTime.Value = Time.time;
-        // nextOpenTime = GetRandomOpenTime();
         nextPreambleTime = GetNextPreambleTime();
 
+        ResetSprite();
         Activate();
     }
 
@@ -172,46 +158,32 @@ public class Human : MonoBehaviour
 
         Deactivate();
 
-        // nextOpenTime = GetRandomOpenTime(); // 仮で
-
         await UniTask.Delay(FaintMillisecond);
 
         faintCurtainTime.Value = Time.time;
-
-        ResetSprite();
-        // nextOpenTime = GetRandomOpenTime();
         nextPreambleTime = GetNextPreambleTime();
 
+        ResetSprite();
         Activate();
     }
-
-    // public float GetRandomOpenTime()
-    // {
-    //     float millisecond = UnityEngine.Random.Range(MinOpenIntervalMillisecond, MaxOpenIntervalMillisecond+1);
-    //     float referenceTime = Mathf.Max(closeCurtainTime.Value, faintCurtainTime.Value);
-    //     return referenceTime + (millisecond / 1000f);
-    // }
 
     public float GetNextPreambleTime()
     {
         float referenceTime = Mathf.Max(closeCurtainTime.Value, faintCurtainTime.Value, lastPreambleTime);
-        return referenceTime + (PreambleIntervalMillisecond / 1000f);
+        return referenceTime + (preambleIntervalMillisecond / 1000f);
     }
 
     public async void Preamble()
     {
         renderer.sprite = PreambleSprite;
         currentPreambleCount++;
-        Deactivate();
+
+        lastPreambleTime = Time.time;
+        nextPreambleTime = GetNextPreambleTime();
 
         await UniTask.Delay(PreambleDurationMillisecond);
 
-        lastPreambleTime = Time.time;
-
         ResetSprite();
-        nextPreambleTime = GetNextPreambleTime();
-
-        Activate();
     }
 
     public void Blighted()
