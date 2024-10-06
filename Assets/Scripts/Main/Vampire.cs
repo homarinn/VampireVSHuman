@@ -76,11 +76,6 @@ public class Vampire : MonoBehaviour
             return;
         }
 
-        if (Human.IsOpenCurtain && !IsGuarding)
-        {
-            Burn();
-        }
-
         if (!IsGuarding)
         {
             if (Human.IsOpenCurtain)
