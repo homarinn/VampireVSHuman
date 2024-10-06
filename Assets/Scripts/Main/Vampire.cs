@@ -196,8 +196,6 @@ public class Vampire : MonoBehaviour
 
         await UniTask.Delay(ReactionMillisecond);
 
-        // elapsedTime += ReactionMillisecond / 1000f;
-
         if (IsClearSecondIncrease)
         {
             ClearSecond += IncreaseClearSecond;
@@ -209,6 +207,9 @@ public class Vampire : MonoBehaviour
                 sizeDelta.y = afterLength;
                 ClearGageRectTransform.sizeDelta = sizeDelta;
             }
+        } else
+        {
+            elapsedTime += ReactionMillisecond / 1000f;
         }
 
         ResetSprite();

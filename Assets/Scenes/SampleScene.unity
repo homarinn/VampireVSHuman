@@ -638,7 +638,7 @@ MonoBehaviour:
   - {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
   - {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
   - {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
-  IsClearSecondIncrease: 1
+  IsClearSecondIncrease: 0
   IsClearGageExpand: 0
   IncreaseClearSecond: 5
   Human: {fileID: 1026669257}
