@@ -4,7 +4,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 
 public class Human : MonoBehaviour
 {
