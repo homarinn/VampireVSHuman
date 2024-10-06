@@ -11,7 +11,9 @@ public class InputHandler : MonoBehaviour
     public static InputHandler Instance;
 
     private PlayerControls controls;
-    public Subject<Unit> OnLeftClickSubject = new ();
+
+    public Subject<Unit> OnPushStartSubject = new ();
+    public Subject<Unit> OnPushCancelSubject = new ();
 
     private void Awake()
     {
@@ -23,20 +25,28 @@ public class InputHandler : MonoBehaviour
     {
         controls.Enable();
 
-        controls.Player.LeftClick.started += OnLeftClickStarted;
+        controls.Player.Push.started += OnPushStarted;
+        controls.Player.Push.canceled += OnPushCanceled;
         controls.Player.Escape.performed += OnEscape;
     }
 
     private void OnDisable()
     {
         controls.Disable();
-        controls.Player.LeftClick.started -= OnLeftClickStarted;
+
+        controls.Player.Push.started -= OnPushStarted;
+        controls.Player.Push.canceled -= OnPushCanceled;
         controls.Player.Escape.performed -= OnEscape;
     }
 
-    private void OnLeftClickStarted(InputAction.CallbackContext context)
+    private void OnPushStarted(InputAction.CallbackContext context)
     {
-        OnLeftClickSubject.OnNext(Unit.Default);
+        OnPushStartSubject.OnNext(Unit.Default);
+    }
+
+    private void OnPushCanceled(InputAction.CallbackContext context)
+    {
+        OnPushCancelSubject.OnNext(Unit.Default);
     }
 
     private void OnEscape(InputAction.CallbackContext context)

@@ -40,7 +40,8 @@ public class Vampire : MonoBehaviour
 
     private void Start()
     {
-        InputHandler.Instance.OnLeftClickSubject.Where(_ => canInput).Subscribe(_ => Guard());
+        InputHandler.Instance.OnPushStartSubject.Where(_ => canInput).Subscribe(_ => StartGuard());
+        InputHandler.Instance.OnPushCancelSubject.Where(_ => canInput).Subscribe(_ => CancelGuard());
         Human.OpenCurtainTime.Skip(1).Subscribe(time => Blighted());
         Human.CloseCurtainTime.Skip(1).Subscribe(time => Activate());
 
@@ -117,17 +118,16 @@ public class Vampire : MonoBehaviour
         }
     }
 
-    private void Guard()
+    private void StartGuard()
     {
-        ToggleGuard();
+        IsGuarding = true;
+        renderer.sprite = GuardSprite;
+    }
 
-        if (IsGuarding)
-        {
-            renderer.sprite = GuardSprite;
-        } else
-        {
-            ResetSprite();
-        }
+    private void CancelGuard()
+    {
+        IsGuarding = false;
+        ResetSprite();
     }
 
     private void ResetSprite()
@@ -143,11 +143,6 @@ public class Vampire : MonoBehaviour
     private void DisableInput()
     {
         canInput = false;
-    }
-
-    private void ToggleGuard()
-    {
-        IsGuarding = !IsGuarding;
     }
 
     private void ShowResult()

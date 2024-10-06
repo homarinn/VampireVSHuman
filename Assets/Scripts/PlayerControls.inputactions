@@ -6,9 +6,9 @@
             "id": "f3d0c5e8-dbb7-4839-9c2e-e03e8ba06dd8",
             "actions": [
                 {
-                    "name": "LeftClick",
+                    "name": "Push",
                     "type": "Button",
-                    "id": "07d69264-a2d0-4c50-a639-551af8b3d3bc",
+                    "id": "98b8d8a9-f324-4bd5-ad06-01c3d3a802dd",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -27,23 +27,34 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "9e28970c-87f3-474c-a518-9b60c68a2c5b",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "LeftClick",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "d7933340-0c4b-4016-a562-f8badc2acc7b",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Escape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "917e924b-2e3c-414c-b160-8a4169c64ad5",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Push",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6a32c13a-30c3-4bfb-97e9-f5ba208de51a",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Push",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
