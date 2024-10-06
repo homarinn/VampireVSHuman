@@ -27,6 +27,10 @@ public class Human : MonoBehaviour
     [Header("フェイント画像を表示する時間")] public int FaintMillisecond = 500;
     [Header("フェイントする確率")] public float FaintRate = 0.25f;
 
+    [Header("大笑いするゲージの割合")] public float SmilePercentage = 70f;
+    [NonSerialized] public bool IsSmiled = false;
+    [Header("大笑いする時間")] public int SmileMillisecond = 2000;
+
     private ReactiveProperty<float> openCurtainTime = new(0);
     public IReadOnlyReactiveProperty<float> OpenCurtainTime => openCurtainTime;
 
@@ -38,15 +42,14 @@ public class Human : MonoBehaviour
 
     [NonSerialized] public bool IsOpenCurtain = false;
 
-    [Header("事前の挙動の画像登録")] public Sprite PreambleSprite;
+    [Header("事前の挙動の画像")] public Sprite PreambleSprite;
 
-    [Header("カーテンを開けた時の画像登録")] public SerializedDictionary<SpriteRenderer, Sprite> OpenCurtainSpriteMap = new();
+    [Header("カーテンを開けた時の画像")] public SerializedDictionary<SpriteRenderer, Sprite> OpenCurtainSpriteMap = new();
     private Dictionary<SpriteRenderer, Sprite> defaultSpriteMap = new();
 
-    [Header("フェイント時の画像登録")] public SerializedDictionary<SpriteRenderer, Sprite> FaintSpriteMap = new();
+    [Header("フェイント時の画像")] public SerializedDictionary<SpriteRenderer, Sprite> FaintSpriteMap = new();
 
-    [Header("反射された時の画像")] public Sprite BlightSprite;
-    [Header("吸血鬼がガードに失敗した時の画像")] public Sprite SmileSprite;
+    [Header("大笑いの画像")] public Sprite SmileSprite;
 
     public CancellationTokenSource CancellationTokenSource = new();
 
@@ -186,14 +189,21 @@ public class Human : MonoBehaviour
         ResetSprite();
     }
 
-    public void Blighted()
+    public async void Smile()
     {
-        renderer.sprite = BlightSprite;
-    }
+        Deactivate();
+        currentPreambleCount = 0;
 
-    public void Smile()
-    {
+        IsSmiled = true;
         renderer.sprite = SmileSprite;
+
+        await UniTask.Delay(SmileMillisecond);
+
+        lastPreambleTime = Time.time;
+        nextPreambleTime = GetNextPreambleTime();
+
+        ResetSprite();
+        Activate();
     }
 
     public void ResetSprite()

@@ -93,6 +93,9 @@ public class Vampire : MonoBehaviour
                 if (ClearGageSlider.value >= ClearSecond)
                 {
                     ShowResult();
+                } else if (ClearGageSlider.value >= ClearSecond * Human.SmilePercentage/100 && !Human.IsSmiled)
+                {
+                    Human.Smile();
                 }
             }
         }
