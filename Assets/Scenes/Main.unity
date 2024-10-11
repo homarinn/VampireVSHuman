@@ -740,13 +740,13 @@ MonoBehaviour:
     - Key: {fileID: 1026669255}
       Value: {fileID: 21300000, guid: 950832395ec754ba48ab1cffa214cec0, type: 3}
     - Key: {fileID: 1097096398}
-      Value: {fileID: 21300000, guid: bf21ed2d5e9f6114e931dd22a29f989d, type: 3}
+      Value: {fileID: 21300000, guid: 82f140f6fa6fa4149966c4f5d0a41885, type: 3}
   FaintSpriteMap:
     itemList:
     - Key: {fileID: 1026669255}
       Value: {fileID: 21300000, guid: 950832395ec754ba48ab1cffa214cec0, type: 3}
     - Key: {fileID: 1097096398}
-      Value: {fileID: 21300000, guid: e586bfbd9d3bdb1438885154584927aa, type: 3}
+      Value: {fileID: 21300000, guid: 42d702cba338b05479949c6162d82344, type: 3}
   SmileSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   Vampire: {fileID: 990407643}
 --- !u!1 &1080975926
@@ -932,7 +932,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e586bfbd9d3bdb1438885154584927aa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 42d702cba338b05479949c6162d82344, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
