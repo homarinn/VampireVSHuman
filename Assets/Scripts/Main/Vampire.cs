@@ -27,10 +27,14 @@ public class Vampire : MonoBehaviour
 
     [NonSerialized] public bool IsGuarding = false;
 
+    [Header("何秒毎に食事SEを鳴らすか")] public float EatSEInterval = 3f;
+    private float elapsedTimeFromLastGuard = 0f;
+
     private bool isActive = false;
 
     public Human Human;
     public Slider ClearGageSlider;
+    public AudioSource AudioSource;
 
     private void Awake()
     {
@@ -81,18 +85,30 @@ public class Vampire : MonoBehaviour
             if (Human.IsOpenCurtain)
             {
                 Burn();
+                return;
             } else
             {
+                elapsedTimeFromLastGuard += Time.deltaTime;
                 ClearGageSlider.value += Time.deltaTime;
 
                 if (ClearGageSlider.value >= ClearSecond)
                 {
                     ShowResult();
+                    return;
                 } else if (ClearGageSlider.value >= ClearSecond * Human.SmilePercentage/100 && !Human.IsSmiled)
                 {
                     Human.Smile();
                 }
+
+                if (elapsedTimeFromLastGuard >= EatSEInterval)
+                {
+                    elapsedTimeFromLastGuard = 0f;
+                    SoundManager.Instance.PlaySFX(SoundManager.Instance.EatSE, AudioSource);
+                }
             }
+        } else
+        {
+            elapsedTimeFromLastGuard = 0f;
         }
     }
 
@@ -101,6 +117,8 @@ public class Vampire : MonoBehaviour
         Deactivate();
 
         renderer.sprite = BurnedSprite;
+
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.BurnSE, AudioSource);
 
         await UniTask.Delay(BurnedMillisecond);
 
@@ -118,6 +136,7 @@ public class Vampire : MonoBehaviour
 
     private void StartGuard()
     {
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.GuardSE, AudioSource);
         IsGuarding = true;
         renderer.sprite = GuardSprite;
     }

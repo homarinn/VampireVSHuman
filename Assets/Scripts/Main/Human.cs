@@ -58,6 +58,7 @@ public class Human : MonoBehaviour
     private bool isActive = false;
 
     public Vampire Vampire;
+    public AudioSource AudioSource;
 
     private void Awake()
     {
@@ -131,6 +132,8 @@ public class Human : MonoBehaviour
 
         Deactivate();
 
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.OpenCurtainSE, AudioSource);
+
         openCurtainTime.Value = Time.time;
 
         int openDuration = UnityEngine.Random.Range(MinOpenDurationMillisecond, MaxOpenDurationMillisecond+1);
@@ -147,6 +150,8 @@ public class Human : MonoBehaviour
     {
         IsOpenCurtain = false;
 
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.CloseCurtainSE, AudioSource);
+
         closeCurtainTime.Value = Time.time;
         nextPreambleTime = GetNextPreambleTime();
 
@@ -162,6 +167,8 @@ public class Human : MonoBehaviour
         }
 
         Deactivate();
+
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.FaintSE, AudioSource);
 
         await UniTask.Delay(FaintMillisecond);
 
@@ -198,6 +205,8 @@ public class Human : MonoBehaviour
 
         IsSmiled = true;
         renderer.sprite = SmileSprite;
+
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.SmileSE, AudioSource);
 
         await UniTask.Delay(SmileMillisecond);
 
