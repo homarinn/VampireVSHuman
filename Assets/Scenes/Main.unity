@@ -598,7 +598,7 @@ Transform:
   m_GameObject: {fileID: 990407640}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.5, y: -1.5, z: -2}
+  m_LocalPosition: {x: -5.14, y: -1.5, z: -2}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -705,7 +705,7 @@ Transform:
   m_GameObject: {fileID: 1026669254}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.4, y: 2.4, z: -1}
+  m_LocalPosition: {x: 5.11, y: -1.02, z: -1}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -731,6 +731,9 @@ MonoBehaviour:
   MaxOpenDurationMillisecond: 3000
   FaintMillisecond: 500
   FaintRate: 0.25
+  SmilePercentage: 70
+  SmileMillisecond: 2000
+  FirstPreambleMillisecond: 2000
   PreambleSprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
   OpenCurtainSpriteMap:
     itemList:
@@ -744,7 +747,6 @@ MonoBehaviour:
       Value: {fileID: 21300000, guid: 950832395ec754ba48ab1cffa214cec0, type: 3}
     - Key: {fileID: 1097096398}
       Value: {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
-  BlightSprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   SmileSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   Vampire: {fileID: 990407643}
 --- !u!1 &1080975926
@@ -930,8 +932,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.9555917, g: 1, b: 0.68490565, a: 1}
+  m_Sprite: {fileID: 21300000, guid: e586bfbd9d3bdb1438885154584927aa, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -950,8 +952,8 @@ Transform:
   m_GameObject: {fileID: 1097096397}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 9.9, y: 9.9, z: 9.9}
+  m_LocalPosition: {x: -0.0079, y: 0.0084, z: 0}
+  m_LocalScale: {x: 17.81637, y: 17.735985, z: 12.856378}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
