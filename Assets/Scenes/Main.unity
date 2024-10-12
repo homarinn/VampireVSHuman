@@ -273,7 +273,7 @@ MonoBehaviour:
   OpenCurtainSE: {fileID: 8300000, guid: 014919c173b3e7743be92144e96516c2, type: 3}
   CloseCurtainSE: {fileID: 8300000, guid: c776722056d0dd4428c1b819ef4da9e3, type: 3}
   FaintSE: {fileID: 0}
-  SmileSE: {fileID: 0}
+  SmileSE: {fileID: 8300000, guid: 5ae1679b9303a6f4b801f154b3d998a7, type: 3}
   EatSE: {fileID: 0}
   GuardSE: {fileID: 8300000, guid: 70e26e13b658f3d448d6665b13c1155c, type: 3}
   BurnSE: {fileID: 8300000, guid: 2f601487a44afb3419fd2cfed801048f, type: 3}
