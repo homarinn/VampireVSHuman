@@ -270,13 +270,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainBGM: {fileID: 8300000, guid: 1596dce598667bc4e9cf609c59a08442, type: 3}
   PreambleSE: {fileID: 8300000, guid: dd36a396af1e59849ab91b212d4bb334, type: 3}
-  OpenCurtainSE: {fileID: 0}
-  CloseCurtainSE: {fileID: 0}
+  OpenCurtainSE: {fileID: 8300000, guid: 014919c173b3e7743be92144e96516c2, type: 3}
+  CloseCurtainSE: {fileID: 8300000, guid: c776722056d0dd4428c1b819ef4da9e3, type: 3}
   FaintSE: {fileID: 0}
   SmileSE: {fileID: 0}
   EatSE: {fileID: 0}
-  GuardSE: {fileID: 0}
-  BurnSE: {fileID: 0}
+  GuardSE: {fileID: 8300000, guid: 70e26e13b658f3d448d6665b13c1155c, type: 3}
+  BurnSE: {fileID: 8300000, guid: 2f601487a44afb3419fd2cfed801048f, type: 3}
   EnvironmentBGM: {fileID: 8300000, guid: bf93e41b9fa4b5942b04123c1c5d4fdd, type: 3}
   FlipSE: {fileID: 0}
   ResultSE: {fileID: 0}
