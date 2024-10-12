@@ -9,6 +9,7 @@ public class SoundManager : MonoBehaviour
 
     [Header("音源をここに登録")]
     public AudioClip MainBGM;
+    public AudioClip PreambleSE;
     public AudioClip OpenCurtainSE;
     public AudioClip CloseCurtainSE;
     public AudioClip FaintSE;

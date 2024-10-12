@@ -193,6 +193,8 @@ public class Human : MonoBehaviour
         lastPreambleTime = Time.time;
         nextPreambleTime = GetNextPreambleTime();
 
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.PreambleSE, AudioSource);
+
         await UniTask.Delay(PreambleDurationMillisecond);
 
         ResetSprite();
