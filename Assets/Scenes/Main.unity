@@ -267,7 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c704f9a641cf6454fa10440b298050d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainBGM: {fileID: 8300000, guid: 94b38f1ddab2b0448a2b94bbe2587944, type: 3}
+  MainBGM: {fileID: 8300000, guid: c7281c8ac631d834592578fc07ccc0a3, type: 3}
   OpenCurtainSE: {fileID: 0}
   CloseCurtainSE: {fileID: 0}
   FaintSE: {fileID: 0}
