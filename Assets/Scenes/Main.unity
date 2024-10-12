@@ -1078,7 +1078,7 @@ MonoBehaviour:
   EatSEInterval: 3
   Human: {fileID: 1026669257}
   ClearGageSlider: {fileID: 1583281931}
-  AudioSource: {fileID: 0}
+  AudioSource: {fileID: 990407644}
 --- !u!82 &990407644
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1303,7 +1303,7 @@ MonoBehaviour:
       Value: {fileID: 21300000, guid: 42d702cba338b05479949c6162d82344, type: 3}
   SmileSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   Vampire: {fileID: 990407643}
-  AudioSource: {fileID: 0}
+  AudioSource: {fileID: 1026669258}
 --- !u!82 &1026669258
 AudioSource:
   m_ObjectHideFlags: 0
