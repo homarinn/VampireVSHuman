@@ -269,6 +269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainBGM: {fileID: 8300000, guid: 1596dce598667bc4e9cf609c59a08442, type: 3}
+  PreambleSE: {fileID: 8300000, guid: dd36a396af1e59849ab91b212d4bb334, type: 3}
   OpenCurtainSE: {fileID: 0}
   CloseCurtainSE: {fileID: 0}
   FaintSE: {fileID: 0}
