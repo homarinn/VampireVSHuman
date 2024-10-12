@@ -16,6 +16,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip EatSE;
     public AudioClip GuardSE;
     public AudioClip BurnSE;
+    public AudioClip EnvironmentBGM;
     public AudioClip FlipSE;
     public AudioClip ResultSE;
 
@@ -26,6 +27,7 @@ public class SoundManager : MonoBehaviour
     public AudioSource BGMSource;
     public AudioSource SFXSource;
     public AudioSource UISource;
+    public AudioSource EnvironmentSource;
 
     private void Awake()
     {
@@ -45,11 +47,13 @@ public class SoundManager : MonoBehaviour
         SetupAudioSource(ref BGMSource, "BGM");
         SetupAudioSource(ref SFXSource, "SFX");
         SetupAudioSource(ref UISource, "UI");
+        SetupAudioSource(ref EnvironmentSource, "Environment");
     }
 
     private void Start()
     {
         PlayBGM(MainBGM);
+        PlayEnvironment(EnvironmentBGM);
     }
 
     /// <summary>
@@ -72,7 +76,7 @@ public class SoundManager : MonoBehaviour
                 Debug.LogError($"AudioMixer group '{groupName}' not found!");
             }
 
-            if (groupName == "BGM")
+            if (groupName == "BGM" || groupName == "Environment")
                 source.loop = true;
         }
     }
@@ -126,7 +130,7 @@ public class SoundManager : MonoBehaviour
     /// <param name="source">鳴らすAudio Source</param>
     public void StopBGM(AudioSource source)
     {
-        BGMSource.Stop();
+        source.Stop();
     }
 
     #endregion
@@ -185,6 +189,42 @@ public class SoundManager : MonoBehaviour
             return;
 
         source.PlayOneShot(clip);
+    }
+
+    /// <summary>
+    /// Environmentを再生します。
+    /// </summary>
+    /// <param name="clip">再生するAudioClip</param>
+    public void PlayEnvironment(AudioClip clip)
+    {
+        PlayBGM(clip, EnvironmentSource);
+    }
+
+    /// <summary>
+    /// Environmentを再生します。
+    /// </summary>
+    /// <param name="clip">再生するAudioClip</param>
+    /// <param name="source">鳴らすAudio Source</param>
+    public void PlayEnvironment(AudioClip clip, AudioSource source)
+    {
+        PlayBGM(clip, source);
+    }
+
+    /// <summary>
+    /// Environmentを停止します。
+    /// </summary>
+    public void StopEnvironment()
+    {
+        EnvironmentSource.Stop();
+    }
+
+    /// <summary>
+    /// Environmentを停止します。
+    /// </summary>
+    /// <param name="source">鳴らすAudio Source</param>
+    public void StopEnvironment(AudioSource source)
+    {
+        source.Stop();
     }
 
     #endregion
