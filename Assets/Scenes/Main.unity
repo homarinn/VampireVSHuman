@@ -1072,8 +1072,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ClearSecond: 30
   DefaultSprite: {fileID: 21300000, guid: 39b5042b4695d504b9d501473fac3083, type: 3}
-  GuardSprite: {fileID: -712631045867808456, guid: b670ab75dde984907b8570040daa08c5, type: 3}
-  BurnedSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  GuardSprite: {fileID: 21300000, guid: ae19baebaa9c4764e9a0191225835f22, type: 3}
+  BurnedSprite: {fileID: 21300000, guid: e1456a69559f9cb45bb0b9ac08944c19, type: 3}
   BurnedMillisecond: 2000
   EatSEInterval: 3
   Human: {fileID: 1026669257}
@@ -1292,13 +1292,13 @@ MonoBehaviour:
   OpenCurtainSpriteMap:
     itemList:
     - Key: {fileID: 1026669255}
-      Value: {fileID: 21300000, guid: 950832395ec754ba48ab1cffa214cec0, type: 3}
+      Value: {fileID: 21300000, guid: 610eca9c00aad204c9e1e9399c403bb4, type: 3}
     - Key: {fileID: 1097096398}
       Value: {fileID: 21300000, guid: 82f140f6fa6fa4149966c4f5d0a41885, type: 3}
   FaintSpriteMap:
     itemList:
     - Key: {fileID: 1026669255}
-      Value: {fileID: 21300000, guid: 950832395ec754ba48ab1cffa214cec0, type: 3}
+      Value: {fileID: 21300000, guid: ff590525b010f784d90af0694d47a9f4, type: 3}
     - Key: {fileID: 1097096398}
       Value: {fileID: 21300000, guid: 42d702cba338b05479949c6162d82344, type: 3}
   SmileSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
