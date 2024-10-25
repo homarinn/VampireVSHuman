@@ -1298,10 +1298,10 @@ MonoBehaviour:
   FaintSpriteMap:
     itemList:
     - Key: {fileID: 1026669255}
-      Value: {fileID: 21300000, guid: ff590525b010f784d90af0694d47a9f4, type: 3}
+      Value: {fileID: 21300000, guid: f3b92ce56492f2e4c845f214f96a810a, type: 3}
     - Key: {fileID: 1097096398}
       Value: {fileID: 21300000, guid: 42d702cba338b05479949c6162d82344, type: 3}
-  SmileSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  SmileSprite: {fileID: 21300000, guid: eeeff8c4543a8614dad2f26ad5c63a8a, type: 3}
   Vampire: {fileID: 990407643}
   AudioSource: {fileID: 1026669258}
 --- !u!82 &1026669258
